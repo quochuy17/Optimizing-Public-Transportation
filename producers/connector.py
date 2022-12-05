@@ -48,20 +48,20 @@ def configure_connector():
                 "value.converter.schemas.enable": "false",
                 "batch.max.rows": "500",
                 # set the connection url
-                "connection.url": "",
+                "connection.url": "jdbc:postgresql://localhost:5432/cta",
                 # set the connection user
-                "connection.user": "",
+                "connection.user": "cta_admin",
                 # set the connection password
-                "connection.password": "",
+                "connection.password": "chicago",
                 # set the table
-                "table.whitelist": "",
+                "table.whitelist": "stations",
                 # set the mode
-                "mode": "",
+                "mode": "incrementing",
                 # set the column
-                "incrementing.column.name": "",
+                "incrementing.column.name": "stop_id",
                 "topic.prefix": "org.chicago.cta.",
                 # set the poll
-                "poll.interval.ms": "",
+                "poll.interval.ms": "10000",
             }
         }),
     )
