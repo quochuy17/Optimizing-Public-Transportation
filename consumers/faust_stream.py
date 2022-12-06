@@ -48,28 +48,28 @@ table = app.Table(
 # "line" is the color of the station. So if the `Station` record has the field `red` set to true,
 # then you would set the `line` of the `TransformedStation` record to the string `"red"`
 @app.agent(topic)
-async def transform(stations):
-
-    async for station in stations:
-        
-        if station.red:
+async def transform_stats(stations):
+    async for s in stations:
+        # Situation : Red
+        if s.red is True:
             line = 'red'
-        elif station.blue:
+        # Situation : Blue
+        elif s.blue is True:
             line = 'blue'
-        elif station.green:
+         # Situation : Green
+        elif s.green is True:
             line = 'green'
+        # Other situations
         else:
-            logger.debug(f"Can't parse line color with station_id = {station.station_id}")
-            line = ''
-
-        transformed_station = TransformedStation(
-            station_id=station.station_id,
-            station_name=station.station_name,
-            order=station.order,
+            line = 'Null or other values'
+        
+        # Declare the command related to "TransformedStation"
+         table[s.station_id] = TransformedStation(
+            station_id=s.station_id,
+            station_name=s.station_name,
+            order=s.order,
             line=line
         )
-        table[station.id] = transformed_station
-
 
 if __name__ == "__main__":
     app.main()
