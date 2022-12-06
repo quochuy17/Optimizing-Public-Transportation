@@ -87,7 +87,7 @@ class KafkaConsumer:
             await gen.sleep(self.sleep_secs)
 
     def _consume(self):
-        """Polls for a message. Returns 1 if a message was received, 0 otherwise"""
+         """Polls for a message. Returns 1 if a message was received, 0 otherwise"""
         #
         #
         # TODO: Poll Kafka for messages. Make sure to handle any errors or exceptions.
@@ -95,19 +95,23 @@ class KafkaConsumer:
         # is retrieved.
         #
         
-        while True:
-            message = self.consumer.poll(self.consumer.consume_timeout)
-            if message is None:
-                logger.WARN("no message received by consumer")
+        try:
+            mess = self.consumer.poll(self.consume_timeout)
+            if mess is None:
+                logger.info("There is no longer to have any messages sent.")
                 return 0
-            elif message.error() is not None:
-                logger.ERROR(f"error from consumer {message.error()}")
-                return 0
+            # Situation : Message is no longer None.
             else:
-                return 1
-        
-        logger.info("_consume is incomplete - skipping")
-        #return 0
+                if message.error() is None:
+                    self.message_handler(message)
+                    return 1
+                else:
+                    logger.error(f"There are some mistakes implemented by consumers. {message.error()}")
+                    return 0
+        # Other criteria        
+        except SerializerError as e:
+            logger.error(f"There are some mistakes happening from the process of collecting the data. {e.message}")
+            return 0
 
 
     def close(self):
