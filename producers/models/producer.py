@@ -44,13 +44,11 @@ class Producer:
             self.create_topic()
             Producer.existing_topics.add(self.topic_name)
 
-        # Strarting the process of configurating the AvroProducer
+        # Starting the process of configurating the AvroProducer
         self.producer = AvroProducer(
-            {"bootstrap.servers": self.broker_properties["BROKER_URL"]}, 
-            schema_registry=CachedSchemaRegistryClient(
-                {"url": self.broker_properties["SCHEMA_REGISTRY_URL"]},
-            )
-        )
+            self.broker_properties,
+            default_key_schema=key_schema,
+            default_value_schema=value_schema)
 
     def create_topic(self):
         """Creates the producer topic if it does not already exist"""
